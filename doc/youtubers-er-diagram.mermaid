@@ -1,0 +1,45 @@
+erDiagram
+    YOUTUBERS ||--o| YOUTUBER_PROFILES : te
+    YOUTUBERS ||--|{ VIDEOS : publica
+    
+    VIDEOS ||--|{ VIDEO_CATEGORIES : te
+    CATEGORIES ||--|{ VIDEO_CATEGORIES : inclou
+    
+    YOUTUBERS {
+        int id PK
+        string channel_name
+        string youtuber_name
+        string description
+        string channel_url
+    }
+    
+    YOUTUBER_PROFILES {
+        int id PK
+        int youtuber_id FK
+        string twitter_url
+        string instagram_url
+        string website_url
+        string contact_info
+    }
+    
+    VIDEOS {
+        int id PK
+        int youtuber_id FK
+        string title
+        string description
+        string video_url
+        date publication_date
+        int views
+        int likes
+    }
+    
+    CATEGORIES {
+        int id PK
+        string name
+        string description
+    }
+    
+    VIDEO_CATEGORIES {
+        int video_id FK
+        int category_id FK
+    }
