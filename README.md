@@ -1,72 +1,147 @@
-# Chat API + Ollama Project
+# API de YouTubers de Programació (Exemple Sequelize)
 
-## Prerequisits
-- Node.js (v20 o superior)
-- Docker
-- Docker Compose
+Aquesta API proporciona accés a informació sobre youtubers que creen contingut relacionat amb programació, els seus perfils, vídeos i categories.
 
-## Programari necessari
+## Descripció del Projecte
 
-### 1. MySQL/MariaDB
+Aquest projecte és una API RESTful desenvolupada amb Node.js, Express i Sequelize (ORM) que gestiona informació sobre youtubers especialitzats en contingut de programació. L'aplicació utilitza una base de dades SQLite i ofereix diferents endpoints per consultar i gestionar la informació.
 
-#### 1a. Iniciar MySQL amb Docker
-Revisar el fitxers docker-compose-dev.yml i docker-compose-test.yml del del directori "docker"
+## Característiques
 
-#### 1b. Accés remot via SSH Tunnel
+- **CRUD complet** per a youtubers, perfils, vídeos i categories
+- **Swagger UI** per a documentació interactiva de l'API
+- **Validació de dades** amb sistema automàtic de verificació de CSVs
+- **Logging extensiu** amb Winston per a desenvolupament i depuració
+- **Gestió centralitzada d'errors** per a respostes consistents
+- **Sistema de càrrega de dades** des d'arxius CSV
+
+## Requisits
+
+- Node.js >= 14.x
+- npm >= 6.x
+
+## Instal·lació
+
+1. Instal·la les dependències:
 ```bash
-ssh -i <id_rsa_user_proxmox> -p 20127 -L 3307:3306 <user>@ieticloudpro.ieti.cat
+npm install
 ```
 
-#### 1c. MySQL instal·lat en local
-
-Instal·lar el programari a Linux o Windows i caldrà crear la base de dades.
-
-### 2. Ollama, alternatives
-
-Hi ha diverses maneres de configurar i accedir a Ollama per al projecte:
-
-#### 2a. Docker (Recomanat si es disposa de GPU)
-```bash
-docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+2. Configura les variables d'entorn creant un arxiu `.env` a l'arrel del projecte:
+```
+NODE_ENV=development
+PORT=3000
+DB_PATH=../../data/youtuber_db.sqlite
+DATA_DIR_PATH=../data
+LOG_FILE_PATH=../data/logs
+LOG_LEVEL=info
 ```
 
+## Ús
 
-#### 2b. Instal·lació nativa
-##### Linux
+### Iniciar el servidor
+
 ```bash
-curl https://ollama.ai/install.sh | sh
+# Mode producció
+npm start
+
+# Mode desenvolupament amb recàrrega automàtica
+npm run dev
+
+# Mode debug
+npm run debug
 ```
 
-##### Windows
-1. Descarregar l'instal·lador de [https://ollama.ai/download](https://ollama.ai/download)
-2. Executar l'instal·lador
-3. Iniciar Ollama des del menú d'inici
+### Carregar dades inicials
 
-
-#### 2c. Accés remot via SSH Tunnel
 ```bash
-ssh -i <id_rsa_user_proxmox> -p 20127 -L 11434:192.168.1.14:11434 <user>@ieticloudpro.ieti.cat
+npm run load-data
 ```
 
+### Validar dades CSV
 
-#### Notes importants sobre Ollama
-- Totes les opcions utilitzen el port 11434 per defecte
-- Assegurar-se que el port 11434 està disponible i no bloquejat pel firewall
-- L'SSH tunnel permet accedir a una instància remota d'Ollama sense necessitat d'instal·lació local
-- L'opció Docker és recomanada per treballar en local si es disposa de GPU compatible
-- La instal·lació nativa pot ser més senzilla per desenvolupament local
-- Pots treballar amb diferents instàncies d'Ollama i canviar entre elles. Haurà de tenir en compte el port.
-
-
-#### Verificació
-Per verificar que Ollama està funcionant correctament:
 ```bash
-curl http://localhost:11434/api/tags
+npm run validate-csv
 ```
 
-Si la resposta mostra una llista de models disponibles, la configuració és correcta.
+### Executar tests
 
+```bash
+npm test
+```
 
-## Configuració de les aplicacions
+## Estructura de la Base de Dades
 
-En el README de cadasdun dels 3 projecte trobaràs instruccions sobre com configurar-los i executar-los
+L'aplicació utilitza els següents models:
+
+- **Youtuber**: Informació bàsica sobre el youtuber (nom, canal, etc.)
+- **PerfilYoutuber**: Informació de perfil (xarxes socials, contacte, etc.)
+- **Video**: Vídeos publicats pels youtubers
+- **Categoria**: Categories de programació (JavaScript, Python, etc.)
+- **VideosCategories**: Relació molts a molts entre vídeos i categories
+
+## Endpoints de l'API
+
+Els principals endpoints disponibles són:
+
+### Youtubers
+- `GET /api/youtubers`: Obté tots els youtubers
+- `GET /api/youtubers/:id`: Obté un youtuber específic
+- `GET /api/youtubers/:id/perfil`: Obté el perfil d'un youtuber
+- `GET /api/youtubers/:id/videos`: Obté els vídeos d'un youtuber
+
+### Vídeos
+- `GET /api/videos`: Obté tots els vídeos
+- `GET /api/videos/:id`: Obté un vídeo específic
+- `GET /api/videos/:id/categories`: Obté les categories d'un vídeo
+- `POST /api/videos`: Crea un nou vídeo
+
+### Categories
+- `GET /api/categories`: Obté totes les categories
+
+## Documentació
+
+La documentació completa de l'API està disponible a través de Swagger UI:
+
+```
+http://localhost:3000/api-docs
+```
+
+## Estructura del Projecte
+
+```
+.
+├── data/
+│   ├── logs/             # Arxius de log
+│   └── youtubers_programacio/  # Dades CSV
+├── src/
+│   ├── config/           # Configuració (BD, logger, Swagger)
+│   ├── controllers/      # Controladors per a cada entitat
+│   ├── middleware/       # Middleware (gestió d'errors, etc.)
+│   ├── models/           # Models Sequelize
+│   ├── routes/           # Definició de rutes
+│   └── utils/            # Utilitats (validació CSV, etc.)
+├── tests/                # Tests unitaris i d'integració
+├── .env                  # Variables d'entorn (no inclòs al repo)
+├── server.js             # Punt d'entrada principal
+├── loadData.js           # Script per carregar dades des de CSV
+└── package.json          # Dependències i scripts
+```
+
+## Desenvolupament
+
+### Dependències Principals
+
+- **express**: Framework web
+- **sequelize**: ORM per a la base de dades
+- **sqlite3**: Driver de base de dades SQLite
+- **winston**: Sistema de logging
+- **papaparse**: Parsing d'arxius CSV
+- **swagger-jsdoc/swagger-ui-express**: Documentació de l'API
+
+### Dependències de Desenvolupament
+
+- **jest**: Framework de testing
+- **nodemon**: Recàrrega automàtica en desenvolupament
+- **supertest**: Testing d'API HTTP
+- **cross-env**: Variables d'entorn multiplataforma
