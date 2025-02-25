@@ -2,7 +2,7 @@
 const VideoController = require('../../../src/controllers/VideoController');
 const { logger } = require('../../../src/config/logger');
 
-// Mock de los modelos
+// Mock dels models
 jest.mock('../../../src/models', () => {
   return {
     Video: {
@@ -29,7 +29,7 @@ jest.mock('../../../src/config/logger', () => ({
   }
 }));
 
-describe('VideoController - Categorías', () => {
+describe('VideoController - Categories', () => {
   let req, res, next;
   const { Video, Youtuber, Categoria } = require('../../../src/models');
 
@@ -43,20 +43,20 @@ describe('VideoController - Categorías', () => {
     jest.clearAllMocks();
   });
 
-  describe('crearVideo con categorías', () => {
-    it('debería crear un vídeo sin categorías cuando no se proporcionan', async () => {
+  describe('crearVideo amb categories', () => {
+    it('hauria de crear un vídeo sense categories quan no es proporcionen', async () => {
       req.body = {
         titol: 'Vídeo Test',
-        descripcio: 'Descripción de prueba',
+        descripcio: 'Descripció de prova',
         url_video: 'https://example.com/video',
         youtuber_id: 1
-        // Sin categorías
+        // Sense categories
       };
       
-      // Simular éxito al buscar el youtuber
+      // Simular èxit en cercar el youtuber
       Youtuber.findByPk.mockResolvedValue({ id: 1, nom_canal: 'Canal Test' });
       
-      // Simular que el vídeo se crea correctamente
+      // Simular que el vídeo es crea correctament
       const mockVideo = {
         id: 1,
         titol: 'Vídeo Test',
@@ -64,7 +64,7 @@ describe('VideoController - Categorías', () => {
       };
       Video.create.mockResolvedValue(mockVideo);
       
-      // Simular éxito al buscar el vídeo completo
+      // Simular èxit en cercar el vídeo complet
       Video.findByPk.mockResolvedValue({
         ...mockVideo,
         Youtuber: { nom_canal: 'Canal Test' },
@@ -73,26 +73,26 @@ describe('VideoController - Categorías', () => {
       
       await VideoController.crearVideo(req, res, next);
       
-      // Verificaciones
-      expect(mockVideo.setCategories).not.toHaveBeenCalled(); // No se llama a setCategories
-      expect(Categoria.findAll).not.toHaveBeenCalled(); // No se buscan categorías
+      // Verificacions
+      expect(mockVideo.setCategories).not.toHaveBeenCalled(); // No es crida a setCategories
+      expect(Categoria.findAll).not.toHaveBeenCalled(); // No es cerquen categories
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalled();
     });
     
-    it('debería crear un vídeo con categorías vacías', async () => {
+    it('hauria de crear un vídeo amb categories buides', async () => {
       req.body = {
         titol: 'Vídeo Test',
-        descripcio: 'Descripción de prueba',
+        descripcio: 'Descripció de prova',
         url_video: 'https://example.com/video',
         youtuber_id: 1,
-        categories: [] // Array vacío
+        categories: [] // Array buit
       };
       
-      // Simular éxito al buscar el youtuber
+      // Simular èxit en cercar el youtuber
       Youtuber.findByPk.mockResolvedValue({ id: 1, nom_canal: 'Canal Test' });
       
-      // Simular que el vídeo se crea correctamente
+      // Simular que el vídeo es crea correctament
       const mockVideo = {
         id: 1,
         titol: 'Vídeo Test',
@@ -100,7 +100,7 @@ describe('VideoController - Categorías', () => {
       };
       Video.create.mockResolvedValue(mockVideo);
       
-      // Simular éxito al buscar el vídeo completo
+      // Simular èxit en cercar el vídeo complet
       Video.findByPk.mockResolvedValue({
         ...mockVideo,
         Youtuber: { nom_canal: 'Canal Test' },
@@ -109,26 +109,26 @@ describe('VideoController - Categorías', () => {
       
       await VideoController.crearVideo(req, res, next);
       
-      // Verificaciones
-      expect(mockVideo.setCategories).not.toHaveBeenCalled(); // No se llama a setCategories con array vacío
-      expect(Categoria.findAll).not.toHaveBeenCalled(); // No se buscan categorías
+      // Verificacions
+      expect(mockVideo.setCategories).not.toHaveBeenCalled(); // No es crida a setCategories amb array buit
+      expect(Categoria.findAll).not.toHaveBeenCalled(); // No es cerquen categories
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalled();
     });
     
-    it('debería crear un vídeo cuando categorías no es un array', async () => {
+    it('hauria de crear un vídeo quan categories no és un array', async () => {
       req.body = {
         titol: 'Vídeo Test',
-        descripcio: 'Descripción de prueba',
+        descripcio: 'Descripció de prova',
         url_video: 'https://example.com/video',
         youtuber_id: 1,
-        categories: "1,2,3" // No es un array
+        categories: "1,2,3" // No és un array
       };
       
-      // Simular éxito al buscar el youtuber
+      // Simular èxit en cercar el youtuber
       Youtuber.findByPk.mockResolvedValue({ id: 1, nom_canal: 'Canal Test' });
       
-      // Simular que el vídeo se crea correctamente
+      // Simular que el vídeo es crea correctament
       const mockVideo = {
         id: 1,
         titol: 'Vídeo Test',
@@ -136,7 +136,7 @@ describe('VideoController - Categorías', () => {
       };
       Video.create.mockResolvedValue(mockVideo);
       
-      // Simular éxito al buscar el vídeo completo
+      // Simular èxit en cercar el vídeo complet
       Video.findByPk.mockResolvedValue({
         ...mockVideo,
         Youtuber: { nom_canal: 'Canal Test' },
@@ -145,26 +145,26 @@ describe('VideoController - Categorías', () => {
       
       await VideoController.crearVideo(req, res, next);
       
-      // Verificaciones
-      expect(mockVideo.setCategories).not.toHaveBeenCalled(); // No se llama a setCategories
-      expect(Categoria.findAll).not.toHaveBeenCalled(); // No se buscan categorías
+      // Verificacions
+      expect(mockVideo.setCategories).not.toHaveBeenCalled(); // No es crida a setCategories
+      expect(Categoria.findAll).not.toHaveBeenCalled(); // No es cerquen categories
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalled();
     });
     
-    it('debería gestionar categorías parcialmente encontradas', async () => {
+    it('hauria de gestionar categories parcialment trobades', async () => {
       req.body = {
         titol: 'Vídeo Test',
-        descripcio: 'Descripción de prueba',
+        descripcio: 'Descripció de prova',
         url_video: 'https://example.com/video',
         youtuber_id: 1,
-        categories: [1, 2, 3] // Solicita 3 categorías
+        categories: [1, 2, 3] // Sol·licita 3 categories
       };
       
-      // Simular éxito al buscar el youtuber
+      // Simular èxit en cercar el youtuber
       Youtuber.findByPk.mockResolvedValue({ id: 1, nom_canal: 'Canal Test' });
       
-      // Simular que el vídeo se crea correctamente
+      // Simular que el vídeo es crea correctament
       const mockVideo = {
         id: 1,
         titol: 'Vídeo Test',
@@ -172,14 +172,14 @@ describe('VideoController - Categorías', () => {
       };
       Video.create.mockResolvedValue(mockVideo);
       
-      // Simular que solo se encuentran 2 de 3 categorías
+      // Simular que només es troben 2 de 3 categories
       const foundCategories = [
         { id: 1, titol: 'Categoria 1' },
         { id: 2, titol: 'Categoria 2' }
       ];
       Categoria.findAll.mockResolvedValue(foundCategories);
       
-      // Simular éxito al buscar el vídeo completo
+      // Simular èxit en cercar el vídeo complet
       Video.findByPk.mockResolvedValue({
         ...mockVideo,
         Youtuber: { nom_canal: 'Canal Test' },
@@ -188,7 +188,7 @@ describe('VideoController - Categorías', () => {
       
       await VideoController.crearVideo(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(Categoria.findAll).toHaveBeenCalledWith({ where: { id: [1, 2, 3] } });
       expect(logger.warn).toHaveBeenCalledWith('Algunes categories no existeixen', expect.any(Object));
       expect(mockVideo.setCategories).toHaveBeenCalledWith(foundCategories);

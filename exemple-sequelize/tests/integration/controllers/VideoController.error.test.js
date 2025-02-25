@@ -2,7 +2,7 @@
 const VideoController = require('../../../src/controllers/VideoController');
 const { logger } = require('../../../src/config/logger');
 
-// Mock de los modelos
+// Mock dels models
 jest.mock('../../../src/models', () => {
   return {
     Video: {
@@ -29,7 +29,7 @@ jest.mock('../../../src/config/logger', () => ({
   }
 }));
 
-describe('VideoController Error Handling', () => {
+describe('VideoController Gestió d\'Errors', () => {
   let req, res, next;
   const { Video, Youtuber, Categoria } = require('../../../src/models');
 
@@ -43,89 +43,89 @@ describe('VideoController Error Handling', () => {
     jest.clearAllMocks();
   });
 
-  describe('obtenirTots - error handling', () => {
-    it('debería gestionar errores de base de datos', async () => {
-      // Simular error al buscar los vídeos
-      const error = new Error('Error de conexión a la base de datos');
+  describe('obtenirTots - gestió d\'errors', () => {
+    it('hauria de gestionar errors de base de dades', async () => {
+      // Simular error en cercar els vídeos
+      const error = new Error('Error de connexió a la base de dades');
       Video.findAll.mockRejectedValue(error);
       
       await VideoController.obtenirTots(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.error).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  describe('obtenirPerId - error handling', () => {
-    it('debería gestionar errores al buscar un vídeo', async () => {
+  describe('obtenirPerId - gestió d\'errors', () => {
+    it('hauria de gestionar errors en cercar un vídeo', async () => {
       req.params = { id: 1 };
       
-      // Simular error al buscar un vídeo por id
-      const error = new Error('Error al consultar la base de datos');
+      // Simular error en cercar un vídeo per id
+      const error = new Error('Error en consultar la base de dades');
       Video.findByPk.mockRejectedValue(error);
       
       await VideoController.obtenirPerId(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.error).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  describe('obtenirCategories - error handling', () => {
-    it('debería gestionar errores al buscar categorías', async () => {
+  describe('obtenirCategories - gestió d\'errors', () => {
+    it('hauria de gestionar errors en cercar categories', async () => {
       req.params = { id: 1 };
       
-      // Simular error al buscar el vídeo
-      const error = new Error('Error al obtener categorías');
+      // Simular error en cercar el vídeo
+      const error = new Error('Error en obtenir categories');
       Video.findByPk.mockRejectedValue(error);
       
       await VideoController.obtenirCategories(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.error).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  describe('crearVideo - error handling', () => {
-    it('debería gestionar errores al crear un vídeo', async () => {
+  describe('crearVideo - gestió d\'errors', () => {
+    it('hauria de gestionar errors en crear un vídeo', async () => {
       req.body = {
         titol: 'Vídeo Test',
-        descripcio: 'Descripción de prueba',
+        descripcio: 'Descripció de prova',
         url_video: 'https://example.com/video',
         youtuber_id: 1,
         categories: [1, 2]
       };
       
-      // Simular éxito al buscar el youtuber
+      // Simular èxit en cercar el youtuber
       Youtuber.findByPk.mockResolvedValue({ id: 1, nom_canal: 'Canal Test' });
       
-      // Simular error al crear el vídeo
-      const error = new Error('Error al crear el vídeo');
+      // Simular error en crear el vídeo
+      const error = new Error('Error en crear el vídeo');
       Video.create.mockRejectedValue(error);
       
       await VideoController.crearVideo(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.error).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(error);
     });
 
-    it('debería gestionar error cuando algunas categorías no existen', async () => {
+    it('hauria de gestionar error quan algunes categories no existeixen', async () => {
       req.body = {
         titol: 'Vídeo Test',
-        descripcio: 'Descripción de prueba',
+        descripcio: 'Descripció de prova',
         url_video: 'https://example.com/video',
         youtuber_id: 1,
         categories: [1, 2, 3]
       };
       
-      // Simular éxito al buscar el youtuber
+      // Simular èxit en cercar el youtuber
       Youtuber.findByPk.mockResolvedValue({ id: 1, nom_canal: 'Canal Test' });
       
-      // Simular que el vídeo se crea correctamente
+      // Simular que el vídeo es crea correctament
       const mockVideo = {
         id: 1,
         titol: 'Vídeo Test',
@@ -133,13 +133,13 @@ describe('VideoController Error Handling', () => {
       };
       Video.create.mockResolvedValue(mockVideo);
       
-      // Simular que solo se encuentran algunas de las categorías solicitadas
+      // Simular que només es troben algunes de les categories sol·licitades
       const foundCategories = [
         { id: 1, titol: 'Categoria 1' }
       ];
       Categoria.findAll.mockResolvedValue(foundCategories);
       
-      // Simular éxito al buscar el vídeo completo
+      // Simular èxit en cercar el vídeo complet
       Video.findByPk.mockResolvedValue({
         ...mockVideo,
         Youtuber: { nom_canal: 'Canal Test' },
@@ -148,9 +148,9 @@ describe('VideoController Error Handling', () => {
       
       await VideoController.crearVideo(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.warn).toHaveBeenCalled();
-      expect(res.status).toHaveBeenCalledWith(201); // El vídeo se crea aunque falten categorías
+      expect(res.status).toHaveBeenCalledWith(201); // El vídeo es crea encara que faltin categories
       expect(res.json).toHaveBeenCalled();
     });
   });

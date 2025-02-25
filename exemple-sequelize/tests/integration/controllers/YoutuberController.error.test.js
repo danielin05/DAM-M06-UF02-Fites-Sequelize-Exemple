@@ -2,7 +2,7 @@
 const YoutuberController = require('../../../src/controllers/YoutuberController');
 const { logger } = require('../../../src/config/logger');
 
-// Mock de los modelos
+// Mock dels models
 jest.mock('../../../src/models', () => {
   return {
     Youtuber: {
@@ -28,7 +28,7 @@ jest.mock('../../../src/config/logger', () => ({
   }
 }));
 
-describe('YoutuberController Error Handling', () => {
+describe('YoutuberController Gestió d\'Errors', () => {
   let req, res, next;
   const { Youtuber, PerfilYoutuber, Video } = require('../../../src/models');
 
@@ -42,63 +42,63 @@ describe('YoutuberController Error Handling', () => {
     jest.clearAllMocks();
   });
 
-  describe('obtenirTots - error handling', () => {
-    it('debería gestionar errores de base de datos', async () => {
-      // Simular error al buscar todos los youtubers
-      const error = new Error('Error de conexión a la base de datos');
+  describe('obtenirTots - gestió d\'errors', () => {
+    it('hauria de gestionar errors de base de dades', async () => {
+      // Simular error en cercar tots els youtubers
+      const error = new Error('Error de connexió a la base de dades');
       Youtuber.findAll.mockRejectedValue(error);
       
       await YoutuberController.obtenirTots(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.error).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  describe('obtenirPerId - error handling', () => {
-    it('debería gestionar errores al buscar un youtuber', async () => {
+  describe('obtenirPerId - gestió d\'errors', () => {
+    it('hauria de gestionar errors en cercar un youtuber', async () => {
       req.params = { id: 1 };
       
-      // Simular error al buscar un youtuber por id
-      const error = new Error('Error al consultar la base de datos');
+      // Simular error en cercar un youtuber per id
+      const error = new Error('Error en consultar la base de dades');
       Youtuber.findByPk.mockRejectedValue(error);
       
       await YoutuberController.obtenirPerId(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.error).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  describe('obtenirPerfil - error handling', () => {
-    it('debería gestionar errores al buscar el perfil', async () => {
+  describe('obtenirPerfil - gestió d\'errors', () => {
+    it('hauria de gestionar errors en cercar el perfil', async () => {
       req.params = { id: 1 };
       
-      // Simular error al buscar el perfil
-      const error = new Error('Error al obtener el perfil');
+      // Simular error en cercar el perfil
+      const error = new Error('Error en obtenir el perfil');
       PerfilYoutuber.findOne.mockRejectedValue(error);
       
       await YoutuberController.obtenirPerfil(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.error).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(error);
     });
   });
 
-  describe('obtenirVideos - error handling', () => {
-    it('debería gestionar errores al buscar vídeos del youtuber', async () => {
+  describe('obtenirVideos - gestió d\'errors', () => {
+    it('hauria de gestionar errors en cercar vídeos del youtuber', async () => {
       req.params = { id: 1 };
       
-      // Simular error al buscar si el youtuber existe
-      const error = new Error('Error al consultar los vídeos');
+      // Simular error en cercar si el youtuber existeix
+      const error = new Error('Error en consultar els vídeos');
       Youtuber.findByPk.mockRejectedValue(error);
       
       await YoutuberController.obtenirVideos(req, res, next);
       
-      // Verificaciones
+      // Verificacions
       expect(logger.error).toHaveBeenCalled();
       expect(next).toHaveBeenCalledWith(error);
     });
