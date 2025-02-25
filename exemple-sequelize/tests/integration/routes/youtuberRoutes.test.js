@@ -3,8 +3,6 @@ const request = require('supertest');
 const app = require('../../../server'); // Importa l'app mockejada
 const { sequelize, Youtuber, PerfilYoutuber } = require('../../setup');
 const { youtuberFixtures, perfilFixtures } = require('../../fixtures/youtubers');
-const Youtuber = require('../../../src/models/Youtuber');
-const PerfilYoutuber = require('../../../src/models/PerfilYoutuber');
 
 describe('Rutes Youtuber', () => {
   beforeAll(async () => {

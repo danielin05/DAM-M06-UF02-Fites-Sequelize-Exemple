@@ -136,8 +136,10 @@ describe('Tests d\'Integració VideoController', () => {
         likes: 30
       });
       
-      // Associar categories al vídeo
-      await testVideo.addCategories(createdCategories);
+      // Utilitza Promise.all per afegir categories una per una
+      await Promise.all(createdCategories.map(categoria => {
+        return testVideo.addCategoria(categoria);
+      }));
     });
     
     it('hauria de retornar categories d\'un vídeo', async () => {
