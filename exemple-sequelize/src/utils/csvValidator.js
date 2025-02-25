@@ -9,7 +9,7 @@ const _ = require('lodash');
  */
 const PROJECT_PATHS = {
     DATA_DIR: path.join(__dirname, '..', '..', '..', 'data', 'youtubers_programacio'),
-    OUTPUT_DIR: path.join(__dirname, '..', '..', '..', 'data', 'sortida')
+    OUTPUT_DIR: path.join(__dirname, '..', '..', '..', 'data', 'logs')
 };
 
 /**
