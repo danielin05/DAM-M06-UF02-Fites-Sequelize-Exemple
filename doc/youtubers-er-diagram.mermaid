@@ -1,45 +1,44 @@
 erDiagram
-    YOUTUBERS ||--o| YOUTUBER_PROFILES : te
-    YOUTUBERS ||--|{ VIDEOS : publica
+    Youtuber ||--o| PerfilYoutuber : "té"
+    Youtuber ||--o{ Video : "publica"
+    Video ||--o{ VideosCategories : "té"
+    Categoria ||--o{ VideosCategories : "té"
     
-    VIDEOS ||--|{ VIDEO_CATEGORIES : te
-    CATEGORIES ||--|{ VIDEO_CATEGORIES : inclou
-    
-    YOUTUBERS {
+    Youtuber {
         int id PK
-        string channel_name
-        string youtuber_name
-        string description
-        string channel_url
+        string nom_canal "NOT NULL"
+        string nom_youtuber "NOT NULL"
+        text descripcio
+        string url_canal
     }
     
-    YOUTUBER_PROFILES {
+    PerfilYoutuber {
         int id PK
         int youtuber_id FK
-        string twitter_url
-        string instagram_url
-        string website_url
-        string contact_info
+        string url_twitter
+        string url_instagram
+        string url_web
+        string informacio_contacte
     }
     
-    VIDEOS {
+    Video {
         int id PK
         int youtuber_id FK
-        string title
-        string description
-        string video_url
-        date publication_date
-        int views
+        string titol "NOT NULL"
+        text descripcio
+        string url_video "NOT NULL"
+        date data_publicacio
+        int visualitzacions
         int likes
     }
     
-    CATEGORIES {
+    Categoria {
         int id PK
-        string name
-        string description
+        string titol "NOT NULL"
+        text descripcio
     }
     
-    VIDEO_CATEGORIES {
-        int video_id FK
-        int category_id FK
+    VideosCategories {
+        int video_id PK,FK
+        int categoria_id PK,FK
     }
