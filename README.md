@@ -22,12 +22,18 @@ Aquest projecte és una API RESTful desenvolupada amb Node.js, Express i Sequeli
 
 ## Instal·lació
 
-1. Instal·la les dependències:
+1. Clona el repositori:
+```bash
+git clone <url-del-repositori>
+cd exemple-sequelize
+```
+
+2. Instal·la les dependències:
 ```bash
 npm install
 ```
 
-2. Configura les variables d'entorn creant un arxiu `.env` a l'arrel del projecte:
+3. Configura les variables d'entorn creant un arxiu `.env` a l'arrel del projecte:
 ```
 NODE_ENV=development
 PORT=3000
@@ -67,17 +73,33 @@ npm run validate-csv
 ### Executar tests
 
 ```bash
+# Executar tots els tests
 npm test
+
+# Executar només tests unitaris
+npm run test:unit
+
+# Executar només tests d'integració
+npm run test:integration
+
+# Executar tests end-to-end
+npm run test:e2e
+
+# Executar tests en mode watch
+npm run test:watch
+
+# Generar informe de cobertura de codi
+npm run test:coverage
 ```
 
 ## Estructura de la Base de Dades
 
 L'aplicació utilitza els següents models:
 
-- **Youtuber**: Informació bàsica sobre el youtuber (nom, canal, etc.)
-- **PerfilYoutuber**: Informació de perfil (xarxes socials, contacte, etc.)
-- **Video**: Vídeos publicats pels youtubers
-- **Categoria**: Categories de programació (JavaScript, Python, etc.)
+- **Youtuber**: Informació bàsica sobre el youtuber (nom, canal, descripció, URL del canal)
+- **PerfilYoutuber**: Informació de perfil (xarxes socials, web personal, contacte)
+- **Video**: Vídeos publicats pels youtubers (títol, descripció, URL, visualitzacions, likes)
+- **Categoria**: Categories de programació (JavaScript, Python, React, etc.)
 - **VideosCategories**: Relació molts a molts entre vídeos i categories
 
 ## Endpoints de l'API
@@ -112,36 +134,86 @@ http://localhost:3000/api-docs
 ```
 .
 ├── data/
-│   ├── logs/             # Arxius de log
+│   ├── logs/                   # Arxius de log
 │   └── youtubers_programacio/  # Dades CSV
-├── src/
-│   ├── config/           # Configuració (BD, logger, Swagger)
-│   ├── controllers/      # Controladors per a cada entitat
-│   ├── middleware/       # Middleware (gestió d'errors, etc.)
-│   ├── models/           # Models Sequelize
-│   ├── routes/           # Definició de rutes
-│   └── utils/            # Utilitats (validació CSV, etc.)
-├── tests/                # Tests unitaris i d'integració
-├── .env                  # Variables d'entorn (no inclòs al repo)
-├── server.js             # Punt d'entrada principal
-├── loadData.js           # Script per carregar dades des de CSV
-└── package.json          # Dependències i scripts
+├── exemple-sequelize/
+│   ├── coverage/               # Informes de cobertura de tests
+│   ├── jest.config.js          # Configuració de Jest
+│   ├── loadData.js             # Script per carregar dades des de CSV
+│   ├── package.json            # Dependències i scripts
+│   ├── server.js               # Punt d'entrada principal
+│   ├── src/
+│   │   ├── config/             # Configuració (BD, logger, Swagger)
+│   │   ├── controllers/        # Controladors per a cada entitat
+│   │   ├── middleware/         # Middleware (gestió d'errors)
+│   │   ├── models/             # Models Sequelize
+│   │   ├── routes/             # Definició de rutes
+│   │   └── utils/              # Utilitats (validació CSV)
+│   └── tests/                  # Tests
+│       ├── e2e/                # Tests end-to-end
+│       ├── fixtures/           # Dades fixes per a tests
+│       ├── integration/        # Tests d'integració
+│       ├── mocks/              # Factories per a mocks de test
+│       ├── setup.js            # Configuració dels tests
+│       └── unit/               # Tests unitaris
+└── .env                        # Variables d'entorn (no inclòs al repo)
 ```
 
 ## Desenvolupament
 
 ### Dependències Principals
 
-- **express**: Framework web
+- **express**: Framework web per construir l'API
 - **sequelize**: ORM per a la base de dades
 - **sqlite3**: Driver de base de dades SQLite
-- **winston**: Sistema de logging
+- **winston**: Sistema avançat de logging
+- **winston-daily-rotate-file**: Rotació d'arxius de log
 - **papaparse**: Parsing d'arxius CSV
 - **swagger-jsdoc/swagger-ui-express**: Documentació de l'API
+- **cors**: Middleware per gestionar CORS
+- **dotenv**: Gestió de variables d'entorn
 
 ### Dependències de Desenvolupament
 
 - **jest**: Framework de testing
-- **nodemon**: Recàrrega automàtica en desenvolupament
 - **supertest**: Testing d'API HTTP
+- **nodemon**: Recàrrega automàtica en desenvolupament
 - **cross-env**: Variables d'entorn multiplataforma
+
+## Gestió d'Errors
+
+El sistema inclou una gestió centralitzada d'errors que proporciona respostes consistents per a:
+
+- Errors de validació de dades
+- Errors d'integritat referencial
+- Errors d'unicitat (duplicats)
+- Errors d'autorització i autenticació
+- Errors generals de base de dades
+- Errors no controlats
+
+## Validació de Dades CSV
+
+El sistema inclou un mòdul de validació per verificar:
+
+- Estructura correcta dels arxius CSV
+- Integritat referencial entre taules
+- Detecció de duplicats
+- Detecció de dades obligatòries faltants
+- Validació de valors (dates futures, mètriques negatives)
+
+## Logging
+
+El sistema de logging està configurat per:
+
+- Registrar detalladament les operacions de l'API
+- Generar arxius de log diaris amb rotació automàtica
+- Separar logs segons nivells d'importància (info, warn, error)
+- Capturar errors de promeses no controlades
+
+## Tests
+
+El projecte inclou una suite de tests:
+
+- **Tests unitaris**: Per a components individuals
+- **Tests d'integració**: Per a interaccions entre components
+- **Tests end-to-end**: Per a fluxos complets de l'API
