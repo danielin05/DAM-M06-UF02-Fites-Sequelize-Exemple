@@ -15,44 +15,7 @@ const { sequelize } = require('./src/config/database');
 const { logger } = require('./src/config/logger');
 
 // Importar models
-const Youtuber = require('./src/models/Youtuber');
-const PerfilYoutuber = require('./src/models/PerfilYoutuber');
-const Video = require('./src/models/Video');
-const Categoria = require('./src/models/Categoria');
-const { DataTypes } = require('sequelize');
-
-// Definir el model VideosCategories que servirà com a taula d'unió
-const VideosCategories = sequelize.define('VideosCategories', {
-  video_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    references: {
-      model: Video,
-      key: 'id'
-    }
-  },
-  categoria_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    references: {
-      model: Categoria,
-      key: 'id'
-    }
-  }
-}, {
-  tableName: 'videos_categories',
-  timestamps: false
-});
-
-// Configurar relacions
-Youtuber.hasOne(PerfilYoutuber, { foreignKey: 'youtuber_id' });
-PerfilYoutuber.belongsTo(Youtuber, { foreignKey: 'youtuber_id' });
-
-Youtuber.hasMany(Video, { foreignKey: 'youtuber_id' });
-Video.belongsTo(Youtuber, { foreignKey: 'youtuber_id' });
-
-Video.belongsToMany(Categoria, { through: VideosCategories, foreignKey: 'video_id' });
-Categoria.belongsToMany(Video, { through: VideosCategories, foreignKey: 'categoria_id' });
+const { Youtuber, PerfilYoutuber, Video, Categoria, VideosCategories } = require('./src/models');
 
 // Rutes als arxius CSV
 const BASE_PATH = path.join(__dirname, process.env.DATA_DIR_PATH, 'youtubers_programacio');
