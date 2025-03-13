@@ -20,6 +20,8 @@ const { logger, expressLogger } = require('./src/config/logger');
 const rutesYoutuber = require('./src/routes/rutesYoutuber');
 const rutesVideo = require('./src/routes/rutesVideo');
 const rutesCategoria = require('./src/routes/rutesCategoria');
+const rutesUsuari = require('./src/routes/rutesUsuari');
+const rutesComentari = require('./src/routes/rutesComentari');
 
 // Crear instància d'Express
 const app = express();
@@ -33,7 +35,7 @@ app.use(cors());
 app.use(express.json());
 
 // Configuració de Swagger per la documentació de l'API
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+app.use('/api-documentacio', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 /**
  * Middleware de logging personalitzat
@@ -57,12 +59,14 @@ app.use(expressLogger);
 app.use('/api/youtubers', rutesYoutuber);
 app.use('/api/videos', rutesVideo);
 app.use('/api/categories', rutesCategoria);
+app.use('/api/usuaris', rutesUsuari);
+app.use('/api/usuaris/comentaris', rutesComentari);
 
 // Gestió centralitzada d'errors (importada del mòdul gestorErrors)
 app.use(gestorErrors);
 
-// Port per defecte 3000 si no està definit a les variables d'entorn
-const PORT = process.env.PORT || 3000;
+// Port per defecte 3010 si no està definit a les variables d'entorn
+const PORT = process.env.PORT || 3010;
 
 /**
  * Funció d'inicialització del servidor
@@ -99,7 +103,9 @@ async function iniciarServidor() {
             logger.info('Rutes disponibles:', {
                 youtubers: '/api/youtubers',
                 videos: '/api/videos',
-                categories: '/api/categories'
+                categories: '/api/categories',
+                usuaris: '/api/usuaris',
+                comentaris: '/api/usuaris/comentaris'
             });
         });
     } catch (error) {

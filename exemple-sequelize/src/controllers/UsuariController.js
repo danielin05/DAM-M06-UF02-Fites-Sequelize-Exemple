@@ -46,30 +46,17 @@ const crearUsuari = async (req, res, next) => {
                 ]}
             );
         }
+        actualDate = new Date(Date.now()).toISOString();
 
-        // Verificar que el usuari existeix
-        usuari = await Usuari.findOne(email);
-        if (usuari) {
-            return res.status(409).json({
-                ok: false,
-                codi: "ERROR_DUPLICAT",
-                missatge: "Ja existeix un usuari amb aquest nom d'usuari o email",
-                detalls: [
-                {
-                    camp: "email",
-                    error: "Aquest email ja està registrat"
-                }
-                ]}
-            );
-        }
-      
+        console.log(actualDate);
+
       // Crear el Usuari
       usuari = await Usuari.create({
         username,
         email,
         password,
         name,
-        data_registre: new Date(Date.now()).toISOString(),
+        data_registre: actualDate,
         idioma
       });
 

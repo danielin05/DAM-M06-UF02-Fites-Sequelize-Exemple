@@ -26,34 +26,32 @@ const usuariController = require('../controllers/UsuariController');
  *               - email
  *               - password
  *             properties:
- *               titol:
+ *               username:
  *                 type: string
- *                 description: Títol del vídeo
- *               descripcio:
+ *                 description: Username Del usuari
+ *               email:
  *                 type: string
- *                 description: Descripció del vídeo
- *               url_video:
+ *                 description: Email del usuari
+ *               password:
  *                 type: string
- *                 description: URL del vídeo a YouTube
- *               youtuber_id:
- *                 type: integer
- *                 description: ID del youtuber que ha pujat el vídeo
- *               data_publicacio:
+ *                 description: Contrasenya del usuari
+ *               name:
+ *                 type: string
+ *                 description: Nom del usuari
+ *               data_registre:
  *                 type: string
  *                 format: date
- *                 description: Data de publicació del vídeo (format ISO)
- *               categories:
- *                 type: array
- *                 items:
- *                   type: integer
- *                 description: Array amb els IDs de les categories del vídeo
+ *                 description: Data de registre del usuari (format ISO)
+ *               idioma:
+ *                 type: string
+ *                 description: Idioma del usuari
  *     responses:
  *       201:
- *         description: Vídeo creat amb èxit
+ *         description: Usuari creat amb èxit
  *       400:
- *         description: Dades invàlides
+ *         description: Les dades proporcionades no compleixen els requisits
  *       404:
- *         description: Youtuber o categoria no trobada
+ *         description: Ja existeix un usuari amb aquest nom d'usuari o email
  *       500:
  *         description: Error intern del servidor
  */

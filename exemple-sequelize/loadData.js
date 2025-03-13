@@ -194,15 +194,17 @@ async function carregarVideosCategories(videos_categories) {
 async function carregarUsuaris(usuaris) {
   try {
     logger.info(`Carregant ${usuaris.length} usuaris...`);
-    
+
     for (const usuari of usuaris) {
+
+      console.log(typeof usuari.data_registre);
       await Usuari.create({
         id: usuari.id,
         username: usuari.username,
         email: usuari.email,
         password: usuari.password,
         name: usuari.name,
-        data_registre: usuari.data_registre,
+        data_registre: usuari.data_registre.toString(),
         idioma: usuari.idioma
       });
     }

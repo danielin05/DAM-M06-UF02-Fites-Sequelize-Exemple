@@ -38,9 +38,13 @@ const VideosCategories = sequelize.define('VideosCategories', {
 
 // Definir el model VideosComentaris que servirà com a taula d'unió
 const VideoComentaris = sequelize.define('VideosComentaris', {
+  id: {
+    type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+  },
   video_id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: {
       model: Video,
       key: 'id'
@@ -48,7 +52,6 @@ const VideoComentaris = sequelize.define('VideosComentaris', {
   },
   comentari_id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: {
       model: Comentari,
       key: 'id'
@@ -56,7 +59,6 @@ const VideoComentaris = sequelize.define('VideosComentaris', {
   },
   usuari_id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: {
       model: Usuari,
       key: 'id'
@@ -69,9 +71,13 @@ const VideoComentaris = sequelize.define('VideosComentaris', {
 
 // Definir el model VideosValoracions que servirà com a taula d'unió
 const VideoValoracions = sequelize.define('VideosValoracions', {
+  id: {
+    type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+  },
   video_id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: {
       model: Video,
       key: 'id'
@@ -79,7 +85,6 @@ const VideoValoracions = sequelize.define('VideosValoracions', {
   },
   valoracio_id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: {
       model: Valoracio,
       key: 'id'
@@ -87,7 +92,6 @@ const VideoValoracions = sequelize.define('VideosValoracions', {
   },
   usuari_id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: {
       model: Usuari,
       key: 'id'
@@ -111,20 +115,14 @@ Video.belongsToMany(Categoria, { through: VideosCategories, foreignKey: 'video_i
 Categoria.belongsToMany(Video, { through: VideosCategories, foreignKey: 'categoria_id' });
 
 //Relació 1:N entre Video i Comentari
-Video.hasMany(Comentari, { through: VideosComentaris, foreignKey: 'video_id' });
-Comentari.belongsTo(Video, { through: VideosComentaris, foreignKey: 'comentari_id' });
+Video.belongsToMany(Comentari, { through: VideoComentaris, foreignKey: 'video_id' });
+Comentari.belongsToMany(Video, { through: VideoComentaris, foreignKey: 'comentari_id' });
+Usuari.belongsToMany(Comentari, { through: VideoComentaris, foreignKey: 'usuari_id' });
 
 //Relació 1:N entre Video i Valoracio
-Video.hasMany(Valoracio, { through: VideosValoracions, foreignKey: 'video_id' });
-Valoracio.belongsTo(Video, { through: VideosValoracions, foreignKey: 'valoracio_id' });
-
-//Relació 1:N entre Usuari i Valoracio
-Usuari.hasMany(Valoracio, { through: VideosValoracions, foreignKey: 'usuari_id' });
-Valoracio.belongsTo(Usuari, { through: VideosValoracions, foreignKey: 'valoracio_id' });
-
-//Relació 1:N entre Usuari i Comentari
-Usuari.hasMany(Comentari, { through: VideosComentaris, foreignKey: 'usuari_id' });
-Comentari.belongsTo(Usuari, { through: VideosComentaris, foreignKey: 'comentari_id' });
+Video.belongsToMany(Valoracio, { through: VideoValoracions, foreignKey: 'video_id' });
+Valoracio.belongsToMany(Video, { through: VideoValoracions, foreignKey: 'valoracio_id' });
+Usuari.belongsToMany(Valoracio, { through: VideoValoracions, foreignKey: 'usuari_id' });
 
 module.exports = {
   Youtuber,
